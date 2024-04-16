@@ -1,33 +1,15 @@
 'use client'
 
-import * as React from "react"
-
-import { useState } from "react"
-
-import { Check, ChevronsUpDown, MinusCircle, PlusCircle } from "lucide-react"
-
-import { cn } from "@/lib/utils"
-
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command"
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-
-import { Separator } from "@/components/ui/separator"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-
-import { CommandList } from "cmdk"
+import { Button } from "@/components/ui/button";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { CommandList } from "cmdk";
+import { Check, ChevronsUpDown, MinusCircle, PlusCircle } from "lucide-react";
+import * as React from "react";
+import { useState } from "react";
 
 const frameworks = [
   {
@@ -38,14 +20,29 @@ const frameworks = [
     value: "urgente",
     label: "urgente",
   }
-]
+];
 
 export function AdicionarPaciente() {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [open, setOpen] = React.useState(false);
+  const [totalDesc, setTotalDesc] = useState(1);
+  const [totalPend, setTotalPend] = useState(1);
+  const [nome, setNome] = useState(""); 
+  const [escala, setEscala] = useState(""); 
+  const [status, setStatus] = useState(""); 
+  const [descriptions, setDescriptions] = useState<string[]>([]);
+  const [pendencias, setPendencias] = useState<string[]>([]);
 
-  const [totalDesc, setTotalDesc] = useState(1)
-  const [totalPend, setTotalPend] = useState(1)
+  const adicionarPaciente = () => {
+    const paciente = {
+      name: nome,
+      escala: escala,
+      status: status,
+      description: descriptions,
+      pendencias: pendencias
+    };
+
+    console.log("Novo paciente:", paciente);
+  };
 
   const incrementTotalDesc = () => {
     setTotalDesc(prevTotalDesc => prevTotalDesc + 1);
@@ -85,12 +82,16 @@ export function AdicionarPaciente() {
               <Label htmlFor="nome">Nome</Label>
               <Input
                 className="col-span-2 h-8"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
               />
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="escala">Escala</Label>
               <Input
                 className="col-span-2 h-8"
+                value={escala}
+                onChange={(e) => setEscala(e.target.value)}
               />
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
@@ -102,12 +103,12 @@ export function AdicionarPaciente() {
                       variant="outline"
                       role="combobox"
                       aria-expanded={open}
-                      className="justify-between w-full"
+                      className="justify-between w-full pl-2"
                     >
-                      {value
-                        ? frameworks.find((framework) => framework.value === value)?.label
-                        : "Selecione o Status..."}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      {status
+                        ? frameworks.find((framework) => framework.value === status)?.label
+                        : ""}
+                      <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-[200px] p-0">
@@ -121,14 +122,14 @@ export function AdicionarPaciente() {
                               key={framework.value}
                               value={framework.value}
                               onSelect={(currentValue) => {
-                                setValue(currentValue === value ? "" : currentValue)
+                                setStatus(currentValue === status ? "" : currentValue)
                                 setOpen(false)
                               }}
                             >
                               <Check
                                 className={cn(
                                   "mr-2 h-4 w-4",
-                                  value === framework.value ? "opacity-100" : "opacity-0"
+                                  status === framework.value ? "opacity-100" : "opacity-0"
                                 )}
                               />
                               {framework.label}
@@ -141,13 +142,18 @@ export function AdicionarPaciente() {
                 </Popover>
               </div>
             </div>           
-            {/* Loop para renderizar os campos de entrada para descrições */}
             {Array.from({ length: totalDesc }).map((_, index) => (
               <div key={index} className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor={`desc${index}`}>Descrição {index + 1}</Label>
                 <Input
                   id={`desc${index}`}
                   className="col-span-2 h-8"
+                  value={descriptions[index] || ""}
+                  onChange={(e) => {
+                    const newDescriptions = [...descriptions];
+                    newDescriptions[index] = e.target.value;
+                    setDescriptions(newDescriptions);
+                  }}
                 />
               </div>
             ))}
@@ -165,13 +171,18 @@ export function AdicionarPaciente() {
                 <PlusCircle size={24} />
               </button>
             </div>
-            {/* Loop para renderizar os campos de entrada para pendências */}
             {Array.from({ length: totalPend }).map((_, index) => (
               <div key={index} className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor={`pend${index}`}>Pendência {index + 1}</Label>
                 <Input
                   id={`pend${index}`}
                   className="col-span-2 h-8"
+                  value={pendencias[index] || ""}
+                  onChange={(e) => {
+                    const newPendencias = [...pendencias];
+                    newPendencias[index] = e.target.value;
+                    setPendencias(newPendencias);
+                  }}
                 />
               </div>
             ))}
@@ -189,12 +200,12 @@ export function AdicionarPaciente() {
                 <PlusCircle size={24} />
               </button>
             </div>
-            <Button className="bg-teal-400 hover:bg-teal-500 font-semibold">
+            <Button onClick={adicionarPaciente} className="bg-teal-400 hover:bg-teal-500 font-semibold mt-4">
               Adicionar
             </Button>
           </div>
         </div>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
