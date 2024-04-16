@@ -1,5 +1,4 @@
-
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,32 +6,53 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
+import { Badge } from "../ui/badge";
 
-export function CardEscala() {
+// Definindo tipos para os dados da escala
+export interface EscalaData {
+  id: number;
+  name: string;
+  status: "estável" | "urgente"
+  escala: string;
+  description: string[];
+  pendencias: string[];
+}
+
+interface CardEscalaProps {
+  data: EscalaData;
+}
+
+export function CardEscala({ data }: CardEscalaProps) {
   return (
-    <Card className="w-[350px]">
+    <Card className="w-[350px] border-green-100 shadow-md">
       <CardHeader>
-        <CardTitle className="text-2xl -mb-1">
-          João de Souza
-        </CardTitle>
-        <CardDescription className="">
-          Escala 01
-        </CardDescription>
+        <div className="flex items-center justify-between">
+        <CardTitle className="text-2xl -mb-1">{data.name}</CardTitle>
+        {
+          data.status == "estável" ? <Badge className="bg-blue-500 text-white">estável</Badge> :
+          data.status == "urgente" ? <Badge className="bg-red-500 text-white">urgente</Badge> :
+          null
+        }
+        </div>
+        <CardDescription className="">Escala {data.escala}</CardDescription>
       </CardHeader>
       <CardContent>
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <CardTitle className="text-lg">Descrição</CardTitle>
-              <CardDescription>AVC</CardDescription>
-              <CardDescription>Acesso Central em Jugular Direita</CardDescription>
-              <CardDescription>PIA em Radial Direita</CardDescription>
-              <CardDescription>Em uso de SVD</CardDescription>
+              {/* Mapeie e renderize cada descrição */}
+              {data.description.map((desc, index) => (
+                <CardDescription key={index}>{desc}</CardDescription>
+              ))}
             </div>
             <div className="flex flex-col space-y-1.5">
               <CardTitle className="text-lg">Pendências</CardTitle>
-              <CardDescription>Aguardando Tomografia</CardDescription>
+              {/* Mapeie e renderize cada pendência */}
+              {data.pendencias.map((pendencia, index) => (
+                <CardDescription key={index}>{pendencia}</CardDescription>
+              ))}
             </div>
           </div>
         </form>
@@ -43,5 +63,5 @@ export function CardEscala() {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
