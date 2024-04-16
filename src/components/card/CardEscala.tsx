@@ -25,19 +25,21 @@ interface CardEscalaProps {
 
 export function CardEscala({ data }: CardEscalaProps) {
   return (
-    <Card className="w-[350px] border-green-100 shadow-md">
-      <CardHeader>
+    <Card className="w-[350px] border-teal-100 shadow-md">
+      <CardHeader className="border-b rounded-md bg-teal-100">
         <div className="flex items-center justify-between">
-        <CardTitle className="text-2xl -mb-1">{data.name}</CardTitle>
-        {
-          data.status == "estável" ? <Badge className="bg-blue-500 hover:bg-blue-500 text-white">estável</Badge> :
-          data.status == "urgente" ? <Badge className="bg-red-500 hover:bg-red-500 text-white">urgente</Badge> :
-          null
-        }
+          <CardTitle className="text-2xl -mb-1 text-teal-600">{data.name}</CardTitle>
+          {
+            data.status == "estável" ? <Badge className="bg-blue-500 hover:bg-blue-500 text-white">estável</Badge> :
+            data.status == "urgente" ? <Badge className="bg-red-500 hover:bg-red-500 text-white">urgente</Badge> :
+            null
+          }
         </div>
-        <CardDescription className="">Escala {data.escala}</CardDescription>
+        <CardDescription className="text-teal-500 font-medium">
+          Escala {data.escala}
+        </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-5">
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
@@ -58,7 +60,7 @@ export function CardEscala({ data }: CardEscalaProps) {
         </form>
       </CardContent>
       <CardFooter className="flex justify-end">
-        <Button className="bg-green-400 hover:bg-green-500 transition-all duration-300 shadow-md font-semibold">
+        <Button className="bg-teal-400 hover:bg-teal-500 transition-all duration-300 shadow-md font-semibold">
           concluído!
         </Button>
       </CardFooter>
