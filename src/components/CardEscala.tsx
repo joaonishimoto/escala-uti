@@ -7,7 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "../ui/badge";
+import { FileCheck, FilePen } from "lucide-react";
+import { Badge } from "./ui/badge";
 
 // Definindo tipos para os dados da escala
 export interface EscalaData {
@@ -59,9 +60,12 @@ export function CardEscala({ data }: CardEscalaProps) {
           </div>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex justify-end space-x-3 mt-2">
         <Button className="bg-teal-400 hover:bg-teal-500 transition-all duration-300 shadow-md font-semibold">
-          concluído!
+          <FilePen size={20} />
+        </Button>
+        <Button className="bg-teal-400 hover:bg-teal-500 transition-all duration-300 shadow-md font-semibold">
+          <FileCheck size={20} />
         </Button>
       </CardFooter>
     </Card>

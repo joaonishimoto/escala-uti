@@ -1,4 +1,5 @@
-import { CardEscala, EscalaData } from "@/components/card/CardEscala";
+import { CardEscala, EscalaData } from "@/components/CardEscala";
+import { Header } from "@/components/Header";
 
 export default function Page() {
   // Seu array de objetos data
@@ -37,7 +38,7 @@ export default function Page() {
 
   return (
     <div className="h-screen flex flex-col space-y-4 items-center justify-center my-5">
-      {/* Mapeie o array data e renderize um CardEscala para cada objeto */}
+      <Header />
       {data.map((item) => (
         <CardEscala key={item.id} data={item} />
       ))}
