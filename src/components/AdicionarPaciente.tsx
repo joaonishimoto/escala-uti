@@ -17,8 +17,8 @@ const prisma = new PrismaClient(); // Cria uma instância do PrismaClient
 
 const frameworks = [
   {
-    value: "estável",
-    label: "estável",
+    value: "estavel",
+    label: "estavel",
   },
   {
     value: "urgente",
@@ -36,20 +36,20 @@ export function AdicionarPaciente() {
   const [descriptions, setDescriptions] = useState<string[]>([]);
   const [pendencias, setPendencias] = useState<string[]>([]);
 
-  const adicionarPaciente = async () => { // Altera para uma função assíncrona para usar o Prisma
+  const adicionarPaciente = async () => { 
     try {
-      const novoPaciente = await prisma.escala.create({ // Usa o método 'create' do Prisma para adicionar o paciente
+      const novoPaciente = await prisma.escala.create({ 
         data: {
           name: nome,
           escala: escala,
           status: status,
-          description: { set: descriptions }, // Usa 'set' para adicionar um array
-          pendencias: { set: pendencias } // Usa 'set' para adicionar um array
+          description: { set: descriptions },
+          pendencias: { set: pendencias }
         }
       });
-      console.log("Novo paciente adicionado:", novoPaciente); // Exibe o paciente adicionado
+      console.log("Novo paciente adicionado:", novoPaciente);
     } catch (error) {
-      console.error("Erro ao adicionar paciente:", error); // Exibe qualquer erro ocorrido durante a adição do paciente
+      console.error("Erro ao adicionar paciente:", error);
     }
   };
 
