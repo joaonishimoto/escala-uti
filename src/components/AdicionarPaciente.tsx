@@ -52,6 +52,8 @@ export function AdicionarPaciente() {
 
         console.log('User created:', data);
 
+        window.location.reload();
+
         setOpen(false)
         setTotalDesc(1)
         setTotalPend(1)
@@ -60,8 +62,6 @@ export function AdicionarPaciente() {
         setStatus("estavel")
         setDescription([])
         setPendencia([])
-
-        window.location.reload();
       } else {
         console.error('Failed to create user');
       }

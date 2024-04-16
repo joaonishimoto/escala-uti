@@ -22,11 +22,8 @@ export function CardEscala({ data }: CardEscalaProps) {
   async function handleCheck(id: number) {
 
     try {
-      console.log(id)
-      const response = await axios.delete(`/api/new/${id}`)
-      
+      await axios.delete(`/api/new/${id}`)
       window.location.reload();
-      
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -34,8 +31,8 @@ export function CardEscala({ data }: CardEscalaProps) {
 
 
   return (
-    <Card className="w-[350px] border-teal-100 shadow-sm hover:shadow-lg transition-shadow duration-300">
-      <CardHeader className="rounded-t-md bg-teal-100">
+    <Card className="w-[350px] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+      <CardHeader className="rounded-t-xl bg-teal-100">
         <div className="flex items-center justify-between">
           <CardTitle className="text-2xl -mb-1 text-teal-600">{data.name}</CardTitle>
           {
@@ -51,15 +48,15 @@ export function CardEscala({ data }: CardEscalaProps) {
       <CardContent className="pt-5">
         <form>
           <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <CardTitle className="text-lg">Descrição</CardTitle>
+            <div className="flex flex-col space-y-1">
+              <CardTitle className="text-lg text-zinc-700">Descrição</CardTitle>
               {/* Mapeie e renderize cada descrição */}
               {data.description.map((desc, index) => (
                 <CardDescription key={index}>{desc}</CardDescription>
               ))}
             </div>
-            <div className="flex flex-col space-y-1.5">
-              <CardTitle className="text-lg">Pendências</CardTitle>
+            <div className="flex flex-col space-y-1">
+              <CardTitle className="text-lg text-zinc-700">Pendências</CardTitle>
               {/* Mapeie e renderize cada pendência */}
               {data.pendencias.map((pendencia, index) => (
                 <CardDescription key={index}>{pendencia}</CardDescription>
