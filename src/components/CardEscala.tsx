@@ -77,7 +77,7 @@ export function CardEscala({ data }: CardEscalaProps) {
         </form>
       </CardContent>
       <CardFooter className="flex justify-end space-x-3 mt-2">
-        <Button className="bg-teal-400 hover:bg-teal-500 transition-all duration-300 shadow-md font-semibold">
+        <Button disabled className="bg-teal-400 hover:bg-teal-500 transition-all duration-300 shadow-md font-semibold">
           <FilePen size={20} />
         </Button>
         <Button onClick={() => handleCheck(data.id)} className="bg-teal-400 hover:bg-teal-500 transition-all duration-300 shadow-md font-semibold">

@@ -23,45 +23,16 @@ export default function Page() {
     fetchPacientes();
   }, []);
 
-/*   const data: EscalaData[] = [
-    {
-      id: 1,
-      name: "João de Souza",
-      escala: "01",
-      status: "estável",
-      description: [
-        "AVC",
-        "Acesso Central em Jugular Direita",
-        "PIA em Radial Direita",
-        "Em uso de SVD"
-      ],
-      pendencias: [
-        "Aguardando Tomografia"
-      ]
-    },
-    {
-      id: 1,
-      name: "Maria Larissa",
-      escala: "02",
-      status: "urgente",
-      description: [
-        "AVC",
-        "Acesso Central em Jugular Direita",
-        "PIA em Radial Direita",
-        "Em uso de SVD"
-      ],
-      pendencias: [
-        "Aguardando Tomografia"
-      ]
-    },
-  ]; */
-
   return (
-    <div className="h-screen flex flex-col space-y-4 items-center justify-center my-5">
-      <Header />
-      {pacientes.map((item) => (
-        <CardEscala key={item.id} data={item} />
-      ))}
+    <div className="h-screen flex flex-col space-y-4 items-center">
+      <div className="fixed py-5 w-full flex items-center justify-center">
+        <Header />
+      </div>
+      <div className="pt-20 overflow-y-auto">
+        {pacientes.map((item) => (
+          <CardEscala key={item.id} data={item} />
+        ))}
+      </div>
     </div>
   );
 }

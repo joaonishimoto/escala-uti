@@ -60,7 +60,7 @@ export function AdicionarPaciente() {
         setStatus("estavel")
         setDescription([])
         setPendencia([])
-        
+
         window.location.reload();
       } else {
         console.error('Failed to create user');
@@ -93,7 +93,7 @@ export function AdicionarPaciente() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <PlusCircle size={40} className="text-teal-500 hover:rotate-[360deg] transition-all duration-500"/>
+        <PlusCircle size={40} className="text-teal-500 cursor-pointer transition-all duration-500"/>
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="grid gap-4">
