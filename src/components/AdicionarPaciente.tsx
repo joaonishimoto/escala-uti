@@ -107,7 +107,7 @@ export function AdicionarPaciente() {
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="nome">Nome</Label>
               <Input
-                className="col-span-2 h-8 touch-none"
+                className="col-span-2 h-8 touch-none text-[16px]"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -115,7 +115,7 @@ export function AdicionarPaciente() {
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="escala">Escala</Label>
               <Input
-                className="col-span-2 h-8 touch-none"
+                className="col-span-2 h-8 touch-none text-[16px]"
                 value={escala}
                 onChange={(e) => setEscala(e.target.value)}
               />
@@ -173,7 +173,7 @@ export function AdicionarPaciente() {
                 <Label htmlFor={`desc${index}`}>Descrição {index + 1}</Label>
                 <Input
                   id={`desc${index}`}
-                  className="col-span-2 h-8 touch-none"
+                  className="col-span-2 h-8 touch-none text-[16px]"
                   value={description[index] || ""}
                   onChange={(e) => {
                     const newDescription = [...description];
@@ -202,7 +202,7 @@ export function AdicionarPaciente() {
                 <Label htmlFor={`pend${index}`}>Pendência {index + 1}</Label>
                 <Input
                   id={`pend${index}`}
-                  className="col-span-2 h-8 touch-none"
+                  className="col-span-2 h-8 touch-none text-[16px]"
                   value={pendencia[index] || ""}
                   onChange={(e) => {
                     const newPendencia = [...pendencia];
