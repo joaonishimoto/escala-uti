@@ -11,6 +11,10 @@ import { Check, ChevronsUpDown, MinusCircle, PlusCircle } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
 
+import { PrismaClient, Status } from '@prisma/client'; // Importa o PrismaClient
+
+const prisma = new PrismaClient(); // Cria uma instância do PrismaClient
+
 const frameworks = [
   {
     value: "estável",
@@ -28,20 +32,25 @@ export function AdicionarPaciente() {
   const [totalPend, setTotalPend] = useState(1);
   const [nome, setNome] = useState(""); 
   const [escala, setEscala] = useState(""); 
-  const [status, setStatus] = useState(""); 
+  const [status, setStatus] = useState<Status>("estavel"); 
   const [descriptions, setDescriptions] = useState<string[]>([]);
   const [pendencias, setPendencias] = useState<string[]>([]);
 
-  const adicionarPaciente = () => {
-    const paciente = {
-      name: nome,
-      escala: escala,
-      status: status,
-      description: descriptions,
-      pendencias: pendencias
-    };
-
-    console.log("Novo paciente:", paciente);
+  const adicionarPaciente = async () => { // Altera para uma função assíncrona para usar o Prisma
+    try {
+      const novoPaciente = await prisma.escala.create({ // Usa o método 'create' do Prisma para adicionar o paciente
+        data: {
+          name: nome,
+          escala: escala,
+          status: status,
+          description: { set: descriptions }, // Usa 'set' para adicionar um array
+          pendencias: { set: pendencias } // Usa 'set' para adicionar um array
+        }
+      });
+      console.log("Novo paciente adicionado:", novoPaciente); // Exibe o paciente adicionado
+    } catch (error) {
+      console.error("Erro ao adicionar paciente:", error); // Exibe qualquer erro ocorrido durante a adição do paciente
+    }
   };
 
   const incrementTotalDesc = () => {
@@ -122,7 +131,7 @@ export function AdicionarPaciente() {
                               key={framework.value}
                               value={framework.value}
                               onSelect={(currentValue) => {
-                                setStatus(currentValue === status ? "" : currentValue)
+                                setStatus(currentValue as Status)
                                 setOpen(false)
                               }}
                             >
