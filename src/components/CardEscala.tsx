@@ -27,7 +27,7 @@ interface CardEscalaProps {
 
 export function CardEscala({ data }: CardEscalaProps) {
 
-  async function handleCheck(id) {
+  async function handleCheck(id: number) {
 
     try {
       console.log(id)
