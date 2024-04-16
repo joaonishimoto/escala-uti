@@ -27,7 +27,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-    const { name, escala, status, description, pendencias } = data;
+    const { name, escala, status, description, pendencia } = data;
 
     const novoPaciente = await prisma.escala.create({ 
       data: {
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
         escala,
         status,
         description: { set: description },
-        pendencias: { set: pendencias }
+        pendencias: { set: pendencia }
       }
     });
     console.log("Novo paciente adicionado:", novoPaciente);
@@ -55,3 +55,4 @@ export async function POST(request: Request) {
     });
   }
 }
+

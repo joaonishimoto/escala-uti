@@ -10,7 +10,7 @@ import { Escala } from "@prisma/client";
 export default function Page() {
   const [pacientes, setPacientes] = useState<EscalaData[]>([])
   
-  const fetchPacientes = async () => {
+   const fetchPacientes = async () => {
     try {
       const response = await axios.get('/api/new');
       setPacientes(response.data);

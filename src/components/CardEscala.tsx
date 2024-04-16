@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { FileCheck, FilePen } from "lucide-react";
 import { Badge } from "./ui/badge";
+import axios from "axios";
 
 // Definindo tipos para os dados da escala
 export interface EscalaData {
@@ -25,6 +26,21 @@ interface CardEscalaProps {
 }
 
 export function CardEscala({ data }: CardEscalaProps) {
+
+  async function handleCheck(id) {
+
+    try {
+      console.log(id)
+      const response = await axios.delete(`/api/new/${id}`)
+      
+      window.location.reload();
+      
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
+
   return (
     <Card className="w-[350px] border-teal-100 shadow-sm hover:shadow-lg transition-shadow duration-300">
       <CardHeader className="rounded-t-md bg-teal-100">
@@ -64,7 +80,7 @@ export function CardEscala({ data }: CardEscalaProps) {
         <Button className="bg-teal-400 hover:bg-teal-500 transition-all duration-300 shadow-md font-semibold">
           <FilePen size={20} />
         </Button>
-        <Button className="bg-teal-400 hover:bg-teal-500 transition-all duration-300 shadow-md font-semibold">
+        <Button onClick={() => handleCheck(data.id)} className="bg-teal-400 hover:bg-teal-500 transition-all duration-300 shadow-md font-semibold">
           <FileCheck size={20} />
         </Button>
       </CardFooter>

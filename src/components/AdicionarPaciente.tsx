@@ -12,6 +12,7 @@ import * as React from "react";
 import { useState } from "react";
 
 import { PrismaClient, Status } from '@prisma/client'; // Importa o PrismaClient
+import axios from "axios";
 
 const prisma = new PrismaClient(); // Cria uma instância do PrismaClient
 
@@ -30,26 +31,42 @@ export function AdicionarPaciente() {
   const [open, setOpen] = React.useState(false);
   const [totalDesc, setTotalDesc] = useState(1);
   const [totalPend, setTotalPend] = useState(1);
-  const [nome, setNome] = useState(""); 
+  const [name, setName] = useState(""); 
   const [escala, setEscala] = useState(""); 
   const [status, setStatus] = useState<Status>("estavel"); 
-  const [descriptions, setDescriptions] = useState<string[]>([]);
-  const [pendencias, setPendencias] = useState<string[]>([]);
+  const [description, setDescription] = useState<string[]>([]);
+  const [pendencia, setPendencia] = useState<string[]>([]);
 
   const adicionarPaciente = async () => { 
     try {
-      const novoPaciente = await prisma.escala.create({ 
-        data: {
-          name: nome,
-          escala: escala,
-          status: status,
-          description: { set: descriptions },
-          pendencias: { set: pendencias }
-        }
+      const response = await axios.post('/api/new', {
+        name,
+        escala,
+        status,
+        description,
+        pendencia,
       });
-      console.log("Novo paciente adicionado:", novoPaciente);
+
+      if (response.status === 201) {
+        const data = response.data;
+
+        console.log('User created:', data);
+
+        setOpen(false)
+        setTotalDesc(1)
+        setTotalPend(1)
+        setName("")
+        setEscala("")
+        setStatus("estavel")
+        setDescription([])
+        setPendencia([])
+        
+        window.location.reload();
+      } else {
+        console.error('Failed to create user');
+      }
     } catch (error) {
-      console.error("Erro ao adicionar paciente:", error);
+      console.error('Error creating user:', error);
     }
   };
 
@@ -91,8 +108,8 @@ export function AdicionarPaciente() {
               <Label htmlFor="nome">Nome</Label>
               <Input
                 className="col-span-2 h-8"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
@@ -157,11 +174,11 @@ export function AdicionarPaciente() {
                 <Input
                   id={`desc${index}`}
                   className="col-span-2 h-8"
-                  value={descriptions[index] || ""}
+                  value={description[index] || ""}
                   onChange={(e) => {
-                    const newDescriptions = [...descriptions];
-                    newDescriptions[index] = e.target.value;
-                    setDescriptions(newDescriptions);
+                    const newDescription = [...description];
+                    newDescription[index] = e.target.value;
+                    setDescription(newDescription);
                   }}
                 />
               </div>
@@ -186,11 +203,11 @@ export function AdicionarPaciente() {
                 <Input
                   id={`pend${index}`}
                   className="col-span-2 h-8"
-                  value={pendencias[index] || ""}
+                  value={pendencia[index] || ""}
                   onChange={(e) => {
-                    const newPendencias = [...pendencias];
-                    newPendencias[index] = e.target.value;
-                    setPendencias(newPendencias);
+                    const newPendencia = [...pendencia];
+                    newPendencia[index] = e.target.value;
+                    setPendencia(newPendencia);
                   }}
                 />
               </div>
