@@ -30,8 +30,8 @@ export function CardEscala({ data }: CardEscalaProps) {
         <div className="flex items-center justify-between">
         <CardTitle className="text-2xl -mb-1">{data.name}</CardTitle>
         {
-          data.status == "estável" ? <Badge className="bg-blue-500 text-white">estável</Badge> :
-          data.status == "urgente" ? <Badge className="bg-red-500 text-white">urgente</Badge> :
+          data.status == "estável" ? <Badge className="bg-blue-500 hover:bg-blue-500 text-white">estável</Badge> :
+          data.status == "urgente" ? <Badge className="bg-red-500 hover:bg-red-500 text-white">urgente</Badge> :
           null
         }
         </div>
