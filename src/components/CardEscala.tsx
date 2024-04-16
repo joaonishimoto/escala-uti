@@ -31,7 +31,7 @@ export function CardEscala({ data }: CardEscalaProps) {
 
 
   return (
-    <Card className="w-[350px] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+    <Card className="w-[300px] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
       <CardHeader className="rounded-t-xl bg-teal-100">
         <div className="flex items-center justify-between">
           <CardTitle className="text-2xl -mb-1 text-teal-600">{data.name}</CardTitle>

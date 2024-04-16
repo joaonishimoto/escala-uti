@@ -28,7 +28,7 @@ export default function Page() {
       <div className="fixed py-5 w-full flex items-center justify-center">
         <Header />
       </div>
-      <div className="pt-20 overflow-y-auto space-y-8 p-20">
+      <div className="pt-20 space-y-8 overflow-x-hidden p-10">
         {pacientes.map((item) => (
           <CardEscala key={item.id} data={item} />
         ))}
