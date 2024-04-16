@@ -36,7 +36,7 @@ export default function Page() {
   ];
 
   return (
-    <div className="h-screen flex flex-col space-y-4 items-center justify-center">
+    <div className="h-screen flex flex-col space-y-4 items-center justify-center my-5">
       {/* Mapeie o array data e renderize um CardEscala para cada objeto */}
       {data.map((item) => (
         <CardEscala key={item.id} data={item} />
