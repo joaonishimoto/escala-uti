@@ -1,19 +1,49 @@
 'use client'
 
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import * as React from "react"
+
+import { useState } from "react"
+
+import { Check, ChevronsUpDown, MinusCircle, PlusCircle } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command"
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { PlusCircle, MinusCircle } from "lucide-react"
-import { Separator } from "./ui/separator"
-import { useState } from "react"
-import { Button } from "./ui/button"
-import { ComboboxStatus } from "./ComboboxStatus"
+
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+import { CommandList } from "cmdk"
+
+const frameworks = [
+  {
+    value: "estável",
+    label: "estável",
+  },
+  {
+    value: "urgente",
+    label: "urgente",
+  }
+]
 
 export function AdicionarPaciente() {
+  const [open, setOpen] = React.useState(false)
+  const [value, setValue] = React.useState("")
+
   const [totalDesc, setTotalDesc] = useState(1)
   const [totalPend, setTotalPend] = useState(1)
 
@@ -44,10 +74,10 @@ export function AdicionarPaciente() {
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="font-medium leading-none">Dimensions</h4>
+          <div className="space-y-2 mb-2">
+            <h4 className="font-medium leading-none">Novo Paciente</h4>
             <p className="text-sm text-muted-foreground">
-              Set the dimensions for the layer.
+              Preencha os campos abaixo para adicionar um novo paciente.
             </p>
           </div>
           <div className="grid gap-2">
@@ -66,10 +96,51 @@ export function AdicionarPaciente() {
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="status">Status</Label>
               <div className="col-span-2 h-8 mb-1">
-                <ComboboxStatus />
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="justify-between w-full"
+                    >
+                      {value
+                        ? frameworks.find((framework) => framework.value === value)?.label
+                        : "Selecione o Status..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Selecione o Status..." />
+                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandGroup>
+                        <CommandList>
+                          {frameworks.map((framework) => (
+                            <CommandItem
+                              key={framework.value}
+                              value={framework.value}
+                              onSelect={(currentValue) => {
+                                setValue(currentValue === value ? "" : currentValue)
+                                setOpen(false)
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  value === framework.value ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              {framework.label}
+                            </CommandItem>
+                          ))}
+                        </CommandList>
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </div>
-            </div>
-            <Separator />
+            </div>           
             {/* Loop para renderizar os campos de entrada para descrições */}
             {Array.from({ length: totalDesc }).map((_, index) => (
               <div key={index} className="grid grid-cols-3 items-center gap-4">
@@ -94,7 +165,6 @@ export function AdicionarPaciente() {
                 <PlusCircle size={24} />
               </button>
             </div>
-            <Separator />
             {/* Loop para renderizar os campos de entrada para pendências */}
             {Array.from({ length: totalPend }).map((_, index) => (
               <div key={index} className="grid grid-cols-3 items-center gap-4">
@@ -119,7 +189,6 @@ export function AdicionarPaciente() {
                 <PlusCircle size={24} />
               </button>
             </div>
-            <Separator />
             <Button className="bg-teal-400 hover:bg-teal-500 font-semibold">
               Adicionar
             </Button>
