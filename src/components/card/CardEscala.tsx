@@ -25,7 +25,7 @@ interface CardEscalaProps {
 
 export function CardEscala({ data }: CardEscalaProps) {
   return (
-    <Card className="w-[350px] border-teal-100 shadow-md">
+    <Card className="w-[350px] border-teal-100 shadow-sm hover:shadow-lg transition-shadow duration-300">
       <CardHeader className="border-b rounded-md bg-teal-100">
         <div className="flex items-center justify-between">
           <CardTitle className="text-2xl -mb-1 text-teal-600">{data.name}</CardTitle>
