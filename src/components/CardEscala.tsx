@@ -7,22 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Escala } from "@prisma/client";
+import axios from "axios";
 import { FileCheck, FilePen } from "lucide-react";
 import { Badge } from "./ui/badge";
-import axios from "axios";
 
-// Definindo tipos para os dados da escala
-export interface EscalaData {
-  id: number;
-  name: string;
-  status: "estável" | "urgente"
-  escala: string;
-  description: string[];
-  pendencias: string[];
-}
 
 interface CardEscalaProps {
-  data: EscalaData;
+  data: Escala;
 }
 
 export function CardEscala({ data }: CardEscalaProps) {
@@ -47,7 +39,7 @@ export function CardEscala({ data }: CardEscalaProps) {
         <div className="flex items-center justify-between">
           <CardTitle className="text-2xl -mb-1 text-teal-600">{data.name}</CardTitle>
           {
-            data.status == "estável" ? <Badge className="bg-blue-500 hover:bg-blue-500 text-white">estável</Badge> :
+            data.status == "estavel" ? <Badge className="bg-blue-500 hover:bg-blue-500 text-white">estavel</Badge> :
             data.status == "urgente" ? <Badge className="bg-red-500 hover:bg-red-500 text-white">urgente</Badge> :
             null
           }

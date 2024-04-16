@@ -1,14 +1,14 @@
 'use client'
 
-import { CardEscala, EscalaData } from "@/components/CardEscala";
+import { CardEscala } from "@/components/CardEscala";
 import { Header } from "@/components/Header";
 import { useEffect, useState } from "react";
 
-import axios from 'axios';
 import { Escala } from "@prisma/client";
+import axios from 'axios';
 
 export default function Page() {
-  const [pacientes, setPacientes] = useState<EscalaData[]>([])
+  const [pacientes, setPacientes] = useState<Escala[]>([])
   
    const fetchPacientes = async () => {
     try {
@@ -28,7 +28,7 @@ export default function Page() {
       <div className="fixed py-5 w-full flex items-center justify-center">
         <Header />
       </div>
-      <div className="pt-20 overflow-y-auto">
+      <div className="pt-20 overflow-y-auto space-y-8">
         {pacientes.map((item) => (
           <CardEscala key={item.id} data={item} />
         ))}
