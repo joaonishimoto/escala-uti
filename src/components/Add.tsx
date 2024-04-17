@@ -14,6 +14,8 @@ import { useState } from "react";
 import { PrismaClient, Status } from '@prisma/client'; // Importa o PrismaClient
 import axios from "axios";
 
+import { useToast } from "@/components/ui/use-toast"
+
 const prisma = new PrismaClient(); // Cria uma instância do PrismaClient
 
 const frameworks = [
@@ -37,8 +39,33 @@ export function AdicionarPaciente() {
   const [description, setDescription] = useState<string[]>([]);
   const [pendencia, setPendencia] = useState<string[]>([]);
 
+  const { toast } = useToast()
+  
   const adicionarPaciente = async () => { 
     try {
+
+      // Verificar se os campos obrigatórios estão preenchidos
+      if (name.trim() === "") {
+        console.error("");
+        toast({
+          title: "Por favor, insira o nome do paciente.",
+          description: `${new Date().toLocaleString()}`,
+        })
+        return; // Retorna para sair da função
+      }
+      /* if (escala.trim() === "") {
+        console.error("Por favor, insira a escala do paciente.");
+        return; // Retorna para sair da função
+      }
+      if (description.length === 0) {
+        console.error("Por favor, insira pelo menos uma descrição.");
+        return; // Retorna para sair da função
+      }
+      if (pendencia.length === 0) {
+        console.error("Por favor, insira pelo menos uma pendência.");
+        return; // Retorna para sair da função
+      } */
+
       const response = await axios.post('/api/new', {
         name,
         escala,
@@ -50,9 +77,15 @@ export function AdicionarPaciente() {
       if (response.status === 201) {
         const data = response.data;
 
-        console.log('User created:', data);
+        console.log('Paciente Criado!', data);
+        toast({
+          title: "Paciente Adicionado! Gerando Card..",
+          description: `${new Date().toLocaleString()}`,
+        })
 
-        window.location.reload();
+        setTimeout(function() {
+          window.location.reload();
+        }, 3000); 
 
         setOpen(false)
         setTotalDesc(1)

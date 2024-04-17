@@ -14,6 +14,8 @@ import { useState } from "react";
 import { Escala, PrismaClient, Status } from '@prisma/client'; // Importa o PrismaClient
 import axios from "axios";
 
+import { useToast } from "@/components/ui/use-toast"
+
 const prisma = new PrismaClient(); // Cria uma instância do PrismaClient
 
 const frameworks = [
@@ -41,6 +43,8 @@ export function EditarPaciente({ id }: EditarPacienteProps) {
   const [description, setDescription] = useState<string[]>([]);
   const [pendencia, setPendencia] = useState<string[]>([]);
 
+  const { toast } = useToast()
+
   const adicionarPaciente = async (pacienteId: number) => { 
     try {
 
@@ -62,9 +66,15 @@ export function EditarPaciente({ id }: EditarPacienteProps) {
       if (response.status === 201) {
         const data = response.data;
 
-        console.log('User created:', data);
-
-        window.location.reload();
+        console.log('Dados editados! Alterando Card..', data);
+        toast({
+          title: "Dados editados!",
+          description: `${new Date().toLocaleString()}`,
+        })
+        
+        setTimeout(function() {
+          window.location.reload();
+        }, 3000); 
 
         setOpen(false)
         setTotalDesc(1)
@@ -119,12 +129,14 @@ export function EditarPaciente({ id }: EditarPacienteProps) {
         setStatus(paciente.status || "estavel");
         setDescription(paciente.description || []);
         setPendencia(paciente.pendencias || []);
+        
+        setTotalDesc(paciente.description.length);
+        setTotalPend(paciente.pendencias.length);
       } else {
         console.error('Paciente não encontrado');
       }
   
-      setTotalDesc(1);
-      setTotalPend(1);
+
     } catch (error) {
       console.error('Erro ao carregar paciente:', error);
     }

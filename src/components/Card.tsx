@@ -13,18 +13,27 @@ import { FileCheck, FilePen } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { EditarPaciente } from "./Update";
 
+import { useToast } from "@/components/ui/use-toast"
 
 interface CardEscalaProps {
   data: Escala;
 }
 
 export function CardEscala({ data }: CardEscalaProps) {
+  const { toast } = useToast()
 
   async function remove(id: number) {
 
     try {
       await axios.delete(`/api/new/${id}`)
-      window.location.reload();
+
+      toast({
+        title: "Excluindo Paciente..",
+        description: `${new Date().toLocaleString()}`,
+      })
+      setTimeout(function() {
+        window.location.reload();
+      }, 3000); 
     } catch (error) {
       console.error('Error fetching users:', error);
     }
