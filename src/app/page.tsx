@@ -1,9 +1,9 @@
 'use client'
 
-import { CardEscala } from "@/components/CardEscala";
-import { Header } from "@/components/Header";
+import { CardEscala } from "@/components/Card";
 import { useEffect, useState } from "react";
 
+import { AdicionarPaciente } from "@/components/Add";
 import { Escala } from "@prisma/client";
 import axios from 'axios';
 
@@ -26,7 +26,7 @@ export default function Page() {
   return (
     <div className="h-screen flex flex-col space-y-4 items-center">
       <div className="fixed py-5 w-full flex items-center justify-center">
-        <Header />
+        <AdicionarPaciente />
       </div>
       <div className="pt-20 space-y-8 overflow-x-hidden p-10">
         {pacientes.map((item) => (

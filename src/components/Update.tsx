@@ -1,0 +1,279 @@
+'use client'
+
+import { Button } from "@/components/ui/button";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { CommandList } from "cmdk";
+import { Check, ChevronsUpDown, FilePen, MinusCircle, PlusCircle } from "lucide-react";
+import * as React from "react";
+import { useState } from "react";
+
+import { Escala, PrismaClient, Status } from '@prisma/client'; // Importa o PrismaClient
+import axios from "axios";
+
+const prisma = new PrismaClient(); // Cria uma instância do PrismaClient
+
+const frameworks = [
+  {
+    value: "estavel",
+    label: "estavel",
+  },
+  {
+    value: "urgente",
+    label: "urgente",
+  }
+];
+
+interface EditarPacienteProps {
+  id: number;
+}
+
+export function EditarPaciente({ id }: EditarPacienteProps) {
+  const [open, setOpen] = React.useState(false);
+  const [totalDesc, setTotalDesc] = useState(1);
+  const [totalPend, setTotalPend] = useState(1);
+  const [name, setName] = useState(""); 
+  const [escala, setEscala] = useState(""); 
+  const [status, setStatus] = useState<Status>("estavel"); 
+  const [description, setDescription] = useState<string[]>([]);
+  const [pendencia, setPendencia] = useState<string[]>([]);
+
+  const adicionarPaciente = async (pacienteId: number) => { 
+    try {
+
+      try {
+        await axios.delete(`/api/new/${pacienteId}`)
+        window.location.reload();
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+
+      const response = await axios.post('/api/new', {
+        name,
+        escala,
+        status,
+        description,
+        pendencia,
+      });
+
+      if (response.status === 201) {
+        const data = response.data;
+
+        console.log('User created:', data);
+
+        window.location.reload();
+
+        setOpen(false)
+        setTotalDesc(1)
+        setTotalPend(1)
+        setName("")
+        setEscala("")
+        setStatus("estavel")
+        setDescription([])
+        setPendencia([])
+      } else {
+        console.error('Failed to create user');
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
+    }
+  };
+
+  const incrementTotalDesc = () => {
+    setTotalDesc(prevTotalDesc => prevTotalDesc + 1);
+  };
+
+  const decrementTotalDesc = () => {
+    if (totalDesc > 1) {
+      setTotalDesc(prevTotalDesc => prevTotalDesc - 1);
+    }
+  };
+
+  const incrementTotalPend = () => {
+    setTotalPend(prevTotalPend => prevTotalPend + 1);
+  };
+
+  const decrementTotalPend = () => {
+    if (totalPend > 1) {
+      setTotalPend(prevTotalPend => prevTotalPend - 1);
+    }
+  };
+
+  async function edit(id: number) {
+    try {
+      const response = await axios.get('/api/new');
+      const pacientes: Escala[] = response.data;
+  
+      const {data}: any = id
+
+      const paciente = pacientes.find((item: Escala) => item.id === id);
+  
+      console.log(data);
+  
+      if (paciente) {
+        setName(paciente.name || "");
+        setEscala(paciente.escala || "");
+        setStatus(paciente.status || "estavel");
+        setDescription(paciente.description || []);
+        setPendencia(paciente.pendencias || []);
+      } else {
+        console.error('Paciente não encontrado');
+      }
+  
+      setTotalDesc(1);
+      setTotalPend(1);
+    } catch (error) {
+      console.error('Erro ao carregar paciente:', error);
+    }
+  }
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button onClick={() => edit(id)} className="bg-teal-400 hover:bg-teal-500 transition-all duration-300 shadow-md font-semibold">
+          <FilePen size={20} />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <div className="grid gap-4">
+          <div className="space-y-2 mb-2">
+            <h4 className="font-medium leading-none">Editar Paciente</h4>
+            <p className="text-sm text-muted-foreground">
+              Edite os dados do paciente.
+            </p>
+          </div>
+          <div className="grid gap-2">
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="nome">Nome</Label>
+              <Input
+                className="col-span-2 h-8 touch-none text-[16px]"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="escala">Escala</Label>
+              <Input
+                className="col-span-2 h-8 touch-none text-[16px]"
+                value={escala}
+                onChange={(e) => setEscala(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="status">Status</Label>
+              <div className="col-span-2 h-8 mb-1">
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="justify-between w-full pl-2"
+                    >
+                      {status
+                        ? frameworks.find((framework) => framework.value === status)?.label
+                        : ""}
+                      <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Selecione o Status..." />
+                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandGroup>
+                        <CommandList>
+                          {frameworks.map((framework) => (
+                            <CommandItem
+                              key={framework.value}
+                              value={framework.value}
+                              onSelect={(currentValue) => {
+                                setStatus(currentValue as Status)
+                                setOpen(false)
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  status === framework.value ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              {framework.label}
+                            </CommandItem>
+                          ))}
+                        </CommandList>
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>           
+            {Array.from({ length: totalDesc }).map((_, index) => (
+              <div key={index} className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor={`desc${index}`}>Descrição {index + 1}</Label>
+                <Input
+                  id={`desc${index}`}
+                  className="col-span-2 h-8 touch-none text-[16px]"
+                  value={description[index] || ""}
+                  onChange={(e) => {
+                    const newDescription = [...description];
+                    newDescription[index] = e.target.value;
+                    setDescription(newDescription);
+                  }}
+                />
+              </div>
+            ))}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={decrementTotalDesc}
+                className="text-red-500"
+              >
+                <MinusCircle size={24} />
+              </button>
+              <button
+                onClick={incrementTotalDesc}
+                className="text-teal-500"
+              >
+                <PlusCircle size={24} />
+              </button>
+            </div>
+            {Array.from({ length: totalPend }).map((_, index) => (
+              <div key={index} className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor={`pend${index}`}>Pendência {index + 1}</Label>
+                <Input
+                  id={`pend${index}`}
+                  className="col-span-2 h-8 touch-none text-[16px]"
+                  value={pendencia[index] || ""}
+                  onChange={(e) => {
+                    const newPendencia = [...pendencia];
+                    newPendencia[index] = e.target.value;
+                    setPendencia(newPendencia);
+                  }}
+                />
+              </div>
+            ))}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={decrementTotalPend}
+                className="text-red-500"
+              >
+                <MinusCircle size={24} />
+              </button>
+              <button
+                onClick={incrementTotalPend}
+                className="text-teal-500"
+              >
+                <PlusCircle size={24} />
+              </button>
+            </div>
+            <Button onClick={() => adicionarPaciente(id)} className="bg-teal-400 hover:bg-teal-500 font-semibold mt-4">
+              Adicionar
+            </Button>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
