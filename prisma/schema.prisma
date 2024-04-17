@@ -20,5 +20,6 @@ model Escala {
 
 enum Status {
   estavel
+  instavel
   urgente
 }

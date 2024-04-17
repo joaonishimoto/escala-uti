@@ -14,7 +14,8 @@ import { useState } from "react";
 import { Escala, PrismaClient, Status } from '@prisma/client'; // Importa o PrismaClient
 import axios from "axios";
 
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
+import { Separator } from "./ui/separator";
 
 const prisma = new PrismaClient(); // Cria uma instância do PrismaClient
 
@@ -22,6 +23,10 @@ const frameworks = [
   {
     value: "estavel",
     label: "estavel",
+  },
+  {
+    value: "instavel",
+    label: "instavel",
   },
   {
     value: "urgente",
@@ -130,8 +135,9 @@ export function EditarPaciente({ id }: EditarPacienteProps) {
         setDescription(paciente.description || []);
         setPendencia(paciente.pendencias || []);
         
-        setTotalDesc(paciente.description.length);
-        setTotalPend(paciente.pendencias.length);
+        paciente.description.length == 0 ? setTotalDesc(1) : setTotalDesc(paciente.description.length)
+        paciente.pendencias.length == 0 ? setTotalPend(1) : setTotalPend(paciente.pendencias.length)
+       
       } else {
         console.error('Paciente não encontrado');
       }
@@ -194,7 +200,7 @@ export function EditarPaciente({ id }: EditarPacienteProps) {
                   <PopoverContent className="w-[200px] p-0">
                     <Command>
                       <CommandInput placeholder="Selecione o Status..." />
-                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandEmpty>No Status found.</CommandEmpty>
                       <CommandGroup>
                         <CommandList>
                           {frameworks.map((framework) => (
@@ -221,7 +227,8 @@ export function EditarPaciente({ id }: EditarPacienteProps) {
                   </PopoverContent>
                 </Popover>
               </div>
-            </div>           
+            </div>
+            <Separator className="my-2"/>             
             {Array.from({ length: totalDesc }).map((_, index) => (
               <div key={index} className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor={`desc${index}`}>Descrição {index + 1}</Label>

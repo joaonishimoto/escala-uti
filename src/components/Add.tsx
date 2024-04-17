@@ -14,7 +14,8 @@ import { useState } from "react";
 import { PrismaClient, Status } from '@prisma/client'; // Importa o PrismaClient
 import axios from "axios";
 
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
+import { Separator } from "./ui/separator";
 
 const prisma = new PrismaClient(); // Cria uma instância do PrismaClient
 
@@ -22,6 +23,10 @@ const frameworks = [
   {
     value: "estavel",
     label: "estavel",
+  },
+  {
+    value: "instavel",
+    label: "instavel",
   },
   {
     value: "urgente",
@@ -173,7 +178,7 @@ export function AdicionarPaciente() {
                   <PopoverContent className="w-[200px] p-0">
                     <Command>
                       <CommandInput placeholder="Selecione o Status..." />
-                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandEmpty>No Status found.</CommandEmpty>
                       <CommandGroup>
                         <CommandList>
                           {frameworks.map((framework) => (
@@ -200,7 +205,8 @@ export function AdicionarPaciente() {
                   </PopoverContent>
                 </Popover>
               </div>
-            </div>           
+            </div>  
+            <Separator className="my-2"/>         
             {Array.from({ length: totalDesc }).map((_, index) => (
               <div key={index} className="grid grid-cols-3 items-center gap-4">
                 <Label htmlFor={`desc${index}`}>Descrição {index + 1}</Label>

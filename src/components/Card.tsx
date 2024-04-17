@@ -7,13 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Escala } from "@prisma/client";
+import { Escala, Status } from "@prisma/client";
 import axios from "axios";
-import { FileCheck, FilePen } from "lucide-react";
-import { Badge } from "./ui/badge";
+import { FileCheck } from "lucide-react";
 import { EditarPaciente } from "./Update";
+import { Badge } from "./ui/badge";
 
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 
 interface CardEscalaProps {
   data: Escala;
@@ -50,28 +50,39 @@ export function CardEscala({ data }: CardEscalaProps) {
         <div className="flex items-center justify-between">
           <CardTitle className="text-2xl -mb-1 text-teal-600">{data.name}</CardTitle>
           {
-            data.status == "estavel" ? <Badge className="bg-blue-500 hover:bg-blue-500 text-white">estavel</Badge> :
-            data.status == "urgente" ? <Badge className="bg-red-500 hover:bg-red-500 text-white">urgente</Badge> :
+            data.status == Status.estavel ? <Badge className="bg-blue-500 hover:bg-blue-500 text-white">estavel</Badge> :
+            data.status == Status.instavel ? <Badge className="bg-yellow-500 hover:bg-yellow-500 text-white">instavel</Badge> :
+            data.status == Status.urgente ? <Badge className="bg-red-500 hover:bg-red-500 text-white">urgente</Badge> :
             null
           }
         </div>
         <CardDescription className="text-teal-500 font-medium">
-          Escala {data.escala}
+          {data.escala}
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-5">
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1">
-              <CardTitle className="text-lg text-teal-700">Descrição</CardTitle>
-              {/* Mapeie e renderize cada descrição */}
+              {
+                data.description.length > 0 
+                ?
+                <CardTitle className="text-lg text-teal-700">Descrição</CardTitle>
+                :
+                <CardDescription className="text-sm text-teal-600 font-medium">sem dados..</CardDescription>
+              }
               {data.description.map((desc, index) => (
                 <CardDescription key={index}>{desc}</CardDescription>
               ))}
             </div>
             <div className="flex flex-col space-y-1">
-              <CardTitle className="text-lg text-teal-700">Pendências</CardTitle>
-              {/* Mapeie e renderize cada pendência */}
+              {
+                data.pendencias.length > 0 
+                ?
+                <CardTitle className="text-lg text-teal-700">Pendências</CardTitle>
+                :
+                null
+              }
               {data.pendencias.map((pendencia, index) => (
                 <CardDescription key={index}>{pendencia}</CardDescription>
               ))}
